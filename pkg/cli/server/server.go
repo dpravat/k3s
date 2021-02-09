@@ -25,7 +25,7 @@ import (
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	kubeapiserverflag "k8s.io/component-base/cli/flag"
 	"k8s.io/kubernetes/pkg/controlplane"
-
+        "github.com/pkg/profile"
 	_ "github.com/go-sql-driver/mysql" // ensure we have mysql
 	_ "github.com/lib/pq"              // ensure we have postgres
 	_ "github.com/mattn/go-sqlite3"    // ensure we have sqlite
@@ -43,7 +43,8 @@ func run(app *cli.Context, cfg *cmds.Server) error {
 		err error
 	)
 
-	// hide process arguments from ps output, since they may contain
+        defer profile.Start(profile.CPUProfile, profile.ProfilePath("/home/root")).Stop()
+        // hide process arguments from ps output, since they may contain
 	// database credentials or other secrets.
 	gspt.SetProcTitle(os.Args[0] + " server")
 
